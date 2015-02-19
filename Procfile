@@ -1,1 +1,1 @@
-web: bin/hubot -a campfire -n brewmaster
+web: bin/hubot --adapter slack -n brewmaster
