@@ -6,4 +6,4 @@ module.exports = (robot) ->
 		msg.reply "IPA er godt."
 
 	robot.respond /sjenk et brygg/i, (msg) ->
-		msg.reply "http://placebrew.com/brew/image/random/"
+		msg.send "http://placebrew.com/brew/image/random/"
