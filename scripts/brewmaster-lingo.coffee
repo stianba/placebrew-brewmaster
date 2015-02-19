@@ -6,4 +6,6 @@ module.exports = (robot) ->
 		msg.reply "IPA er godt."
 
 	robot.respond /sjenk et brygg/i, (msg) ->
-		msg.send "http://placebrew.com/brew/image/random/"
+		width = Math.floor(Math.random() * 1800) + 200
+		height = Math.floor(Math.random() * 1800) + 200
+		msg.send "http://placebrew.com/brew/image/a/#{width}/#{height}"
