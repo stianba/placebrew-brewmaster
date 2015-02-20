@@ -29,3 +29,45 @@ module.exports = (robot) ->
 				return
 
 			msg.send url
+
+	robot.respond /hvem er dagens medarbeider/i, (msg) ->
+		employees = [
+			"Kjerstin"
+			"Tore"
+			"Tor Alf"
+			"Thord"
+			"Tone"
+			"Susanne"
+			"Annette"
+			"John"
+			"Kristian"
+			"Kine"
+			"Stian"
+			"Jon"
+			"Line"
+			"Karl"
+		]
+
+		today = new Date()
+		anotherDay = null
+		staffOfTheDayMem = robot.brain.get 'staffOfTheDay'
+		staffOfTheDay = employees[ Math.floor( Math.random() * employees.length ) ]
+
+		if staffOfTheDayMem?
+			anotherDay = staffOfTheDayMem.day
+			staffOfTheDay = staffOfTheDayMem.staffName if today.toDateString is anotherDay
+
+		responsePhrases = [
+			"Dagens streber, dagens do-er, dagens uomtvistelige medarbeider, er... *Trommevirvel* #{staffOfTheDay}!"
+			"Ingen overraskelse det, vel? Det er #{staffOfTheDay}, selvfølgelig."
+			"Er du spent? Tror du det er deg? Er du #{staffOfTheDay}? I så fall er du dagens medarbeider. Gratla."
+		]
+		robot.brain.set 'staffOfTheDay', { day: today.toDateString, staffName: staffOfTheDay }
+		msg.send msg.random responsePhrases
+
+	robot.respond /jeg liker ikke dagens medarbeider/i, (msg) ->
+		robot.brain.set 'staffOfTheDay', {}
+		msg.reply "Enig. La meg tukle litt med dokumentene her..."
+
+
+		
