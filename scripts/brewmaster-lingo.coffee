@@ -30,7 +30,7 @@ module.exports = (robot) ->
 
 			msg.send url
 
-	robot.respond /hvem er dagens medarbeider/i, (msg) ->
+	robot.respond /(?=.*hvem)(?=.*dagens)(?=.*medarbeider)/i, (msg) ->
 		employees = [
 			"Kjerstin"
 			"Tore"
@@ -65,7 +65,7 @@ module.exports = (robot) ->
 		robot.brain.set 'staffOfTheDay', { day: today.toDateString, staffName: staffOfTheDay }
 		msg.send msg.random responsePhrases
 
-	robot.respond /jeg liker ikke dagens medarbeider/i, (msg) ->
+	robot.respond /(?=.*liker)(?=.*ikke)(?=.*dagens)(?=.*medarbeider)/i, (msg) ->
 		robot.brain.set 'staffOfTheDay', {}
 		msg.reply "Enig. La meg tukle litt med dokumentene her..."
 
