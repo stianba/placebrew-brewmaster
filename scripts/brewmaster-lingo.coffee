@@ -108,6 +108,11 @@ module.exports = (robot) ->
 	robot.respond /quiz svar (.*)/i, (msg) ->
 		userAnswer = msg.match[1]
 		quizMem = robot.brain.get 'quiz'
+		quizStreakMem = robot.brain.get 'quizStreak'
+
+		if !quizStreakMem?
+			quizStreakMem = {}
+			quizStreakMem[msg.message.user.name] = 0
 
 		if quizMem?
 			for userQuiz, i in quizMem
@@ -115,13 +120,34 @@ module.exports = (robot) ->
 					if userAnswer.toLowerCase() is userQuiz.quiz.answer.toLowerCase()
 						quizMem.splice i, 1
 						robot.brain.set 'quiz', quizMem
+						quizStreakMem[userQuiz.username] += 1
 						msg.send "*#{userAnswer}* er riktig. Grattis. Du er flink, ass."
 					else
+						quizStreakMem[msg.message.user.name] = 0
 						msg.send "*#{userAnswer}* er feil. Prøv igjen. Douche."
+
+					robot.brain.set 'quizStreak', quizStreakMem
 
 					return
 
 		msg.send "Hva er det du prøver å svare på, egentlig?"
+
+	robot.respond /quiz skår (.*)/i, (msg) ->
+		if msg.match[1]
+			username = msg.match[1]
+		else
+			username = msg.message.user.name
+
+		quizStreakMem = robot.brain.get 'quizStreak'
+
+		if quizStreakMem[username]?
+			msg.send "*#{username}* har foreløpig klart å svare riktig *#{quizStreakMem[username]}* ganger på rad."
+			return
+
+		msg.send "*#{username}* har ikke prøvd quizzen enda. For dum til å tørre, tipper jeg."		
+
+
+
 
 
 
