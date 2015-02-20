@@ -69,5 +69,60 @@ module.exports = (robot) ->
 		robot.brain.set 'staffOfTheDay', {}
 		msg.reply "Enig. La meg tukle litt med dokumentene her..."
 
+	robot.respond /quiz start/i, (msg) ->
+		quiz = [
+			{
+				question: "Hva står IPA for?"
+				answer: "India Pale Ale"
+			}
+			{
+				question: "Hvilket år ble Ludens Reklamebyrå stiftet?"
+				answer: "2001"
+			}
+			{
+				question: "Risør er en fin by. I hvilket fylke ligger den?"
+				answer: "Aust-Agder"
+			}
+		]
 
-		
+		selectedQuiz = quiz[ Math.floor( Math.random() * quiz.length ) ]
+		quizObject = { username: msg.message.user.name, quiz: selectedQuiz }
+		quizMem = robot.brain.get 'quiz'
+
+		# Overwrite ongoing quiz
+		if quizMem?
+			for userQuiz, i in quizMem
+				if userQuiz.username is msg.message.user.name
+					quizMem.splice i, 1
+					break
+
+			quizMem.push quizObject
+		else
+			quizMem = [
+				quizObject
+			]
+
+		robot.brain.set 'quiz', quizMem
+		msg.send quizObject.quiz.question
+
+	robot.respond /quiz svar (.*)/i, (msg) ->
+		userAnswer = msg.match[1]
+		quizMem = robot.brain.get 'quiz'
+
+		if quizMem?
+			for userQuiz, i in quizMem
+				if userQuiz.username is msg.message.user.name
+					if userAnswer.toLowerCase() is userQuiz.quiz.answer.toLowerCase()
+						quizMem.splice i, 1
+						robot.brain.set 'quiz', quizMem
+						msg.send "*#{userAnswer}* er riktig. Grattis. Du er flink, ass."
+					else
+						msg.send "*#{userAnswer}* er feil. Prøv igjen. Douche."
+
+					return
+
+		msg.send "Hva er det du prøver å svare på, egentlig?"
+
+
+
+
