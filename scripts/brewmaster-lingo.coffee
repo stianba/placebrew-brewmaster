@@ -58,9 +58,9 @@ module.exports = (robot) ->
 			staffOfTheDay = staffOfTheDayMem.staffName if today.toDateString is anotherDay
 
 		responsePhrases = [
-			"Dagens streber, dagens do-er, dagens uomtvistelige medarbeider, er... *Trommevirvel* #{staffOfTheDay}!"
-			"Ingen overraskelse det, vel? Det er #{staffOfTheDay}, selvfølgelig."
-			"Er du spent? Tror du det er deg? Er du #{staffOfTheDay}? I så fall er du dagens medarbeider. Gratla."
+			"Dagens streber, dagens do-er, dagens uomtvistelige medarbeider, er... (Trommevirvel) *#{staffOfTheDay}*!"
+			"Ingen overraskelse det, vel? Det er *#{staffOfTheDay}*, selvfølgelig."
+			"Er du spent? Tror du det er deg? Er du *#{staffOfTheDay}*? I så fall er du dagens medarbeider. Gratla."
 		]
 		robot.brain.set 'staffOfTheDay', { day: today.toDateString, staffName: staffOfTheDay }
 		msg.send msg.random responsePhrases
